@@ -1,0 +1,279 @@
+ ejercicio89(){
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+            if((i+j)%2==1){
+                this.data[i][j]=0;
+            }else{
+                this.data[i][j]=1;
+            }
+        }
+    }
+  }
+ //rotar matrix
+ ejercicio90(){ 
+    const n=this.rows;
+    const rotada=new Matrix(this.cols,this.rows,0);
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+            rotada.data[j][n - 1 - i] = this.data[i][j];
+      }
+    }
+        return rotada;
+ }
+ // ejercicio91: rellenar la matriz con los números 1..n*n en espiral (horario) desde (0,0)
+    ejercicio91(){
+      const total = this.rows * this.cols;
+      let value = 1;
+
+      for (let i = 0; i < this.rows; i++){
+        for (let j = 0; j < this.cols; j++){
+          this.data[i][j] = 0;
+        }
+      }
+      let arriba = 0, bottom = this.rows - 1, left = 0, right = this.cols - 1;
+      while (value <= total){
+        for (let j = left; j <= right && value <= total; j++){
+          this.data[arriba][j] = value++;
+        }
+        arriba++;
+
+        
+        for (let i = arriba; i <= bottom && value <= total; i++){
+          this.data[i][right] = value++;
+        }
+        right--;
+
+     
+        for (let j = right; j >= left && value <= total; j--){
+          this.data[bottom][j] = value++;
+        }
+        bottom--;
+
+        for (let i = bottom; i >= arriba && value <= total; i--){
+          this.data[i][left] = value++;
+        }
+        left++;
+      }
+    }
+
+    
+  toString() {
+    return this.data.map(row => row.join('\t')).join('\n');
+  }
+
+    // Método: rellenar la matriz con nombres de imágenes (array de strings)
+  fillFromAssets(imageNames) {
+    let index = 0;
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        if (index < imageNames.length) {
+          // Extraer número del nombre de archivo (ej: "img_5.png" → 5)
+          const match = imageNames[index].match(/\d+/);
+          this.data[i][j] = match ? parseInt(match[0]) : imageNames[index];
+          index++;
+        } else {
+          this.data[i][j] = null; // si no hay más imágenes
+        }
+      }
+    }
+  }
+
+  // ejercicio92: contar cuántas filas son palíndromas (leer cada fila y comparar con su reverso)
+  ejercicio92(){
+    let count = 0;
+    
+    for (let i = 0; i < this.rows; i++){
+      let isPal = true;
+      for (let j = 0; j < Math.floor(this.cols / 2); j++){
+        if (this.data[i][j] == this.data[i][this.cols - 1 - j]){
+          isPal = true;
+        }
+        if (isPal==true){
+          count++;
+        }
+        
+      }   
+  }
+  alert("Número de filas palíndromas: " + count);
+  }
+  ejercicio93(){
+   
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+         if(i==0 || j==0 || i==this.rows-1 || j==this.cols-1){
+           this.data[i][j]=1;
+        }else if(i==1 || j==1 || i==this.rows-2 || j==this.cols-2){
+          this.data[i][j]=0;
+        }else if(i==2 || j==2 || i==this.rows-3 || j==this.cols-3){
+          this.data[i][j]=1;
+        }else if(i==3 || j==3 || i==this.rows-4 || j==this.cols-4){
+          this.data[i][j]=0;
+        }else{
+          this.data[i][j]=1;}
+      }
+    }
+  }       
+  ejercicio97(){
+    for(let i=0;i<this.rows;i++){
+      for(let j=0;j<this.cols;j++){
+        if((i+j) <= 10){
+          this.data[i][j]=1;
+        }
+      }
+    }
+  } 
+  ejercicio98(){
+    let c=Math.floor(this.cols/2);
+    for(let i=0;i<this.rows;i++){
+      for(let j=0;j<this.cols;j++){
+        if(i===j || j===c || (i+j)===this.cols-1){
+          this.data[i][j]=1;
+        }else{
+          this.data[i][j]=0;
+        } 
+      }
+    }
+  }
+  
+  ejercicio94(){
+    let sumaprinc=0;
+    let sumasec=0;
+    let igualdad=true;
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        if(i==j){
+          sumaprinc+=this.data[i][j];
+        }
+        if(i+j==this.cols-1){
+          sumasec+=this.data[i][j];
+        }
+        if(sumaprinc==sumasec){
+          igualdad=true;
+        }else{
+          igualdad=false;
+        }
+      }
+    }
+    alert ("diagonal principal: "+sumaprinc+" diagonal secundaria: "+sumasec+" iguales: " + igualdad );
+    return igualdad;
+  }
+  ejercicio95(){
+    // Rellenar la matriz en "serpiente diagonal" (zigzag por diagonales)
+    // Recorremos diagonales con suma de índices s = row + col.
+    // Para cada diagonal recogemos coordenadas y las recorremos en orden alternado.
+    let value = 1;
+    // inicializar
+    
+
+    const maxS = 18;
+    for (let s = 0; s <= maxS; s++){
+      const coords = [];
+      for (let r = 0; r < this.rows; r++){
+        const c = s - r;
+        if (c >= 0 && c < this.cols){
+          coords.push([r, c]);
+        }
+      }
+     
+      if (s % 2 === 0) coords.reverse();
+      for (const [r, c] of coords){
+        this.data[r][c] = value++;
+      }
+    }
+  }
+  ejercicio96(){
+  let suma1=0;
+    let suma2=0;
+    let suma3=0;
+    let suma4=0;
+    let suma5=0;
+    let suma6=0;
+    let suma7=0;
+    let suma8=0;
+    let suma9=0;
+    let suma10=0;
+    let sumacolumna=0;
+    let sumacolumna2=0;
+    let sumacolumna3=0;
+    let sumacolumna4=0;
+    let sumacolumna5=0; 
+    let sumacolumna6=0;
+    let sumacolumna7=0;
+    let sumacolumna8=0;
+    let sumacolumna9=0;
+    let sumacolumna10=0;
+    let esmagica=true;
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.cols; j++) {
+        if(j==0){
+          suma1+=this.data[i][j];
+        }
+        if(j==1){
+          suma2+=this.data[i][j]; 
+        }
+        if(j==2){
+          suma3+=this.data[i][j];
+        }
+        if(j==3){
+          suma4+=this.data[i][j];
+        }
+        if(j==4){
+          suma5+=this.data[i][j];
+        }
+        if(j==5){
+          suma6+=this.data[i][j];
+        }
+        if(j==6){
+          suma7+=this.data[i][j];
+        }
+        if(j==7){
+          suma8+=this.data[i][j];
+        }
+        if(j==8){
+          suma9+=this.data[i][j];
+        }
+        if(j==9){
+          suma10+=this.data[i][j];
+        }
+        if(i==0){
+          sumacolumna+=this.data[i][j];
+        }     
+        if(i==1){
+          sumacolumna2+=this.data[i][j];
+        }
+        if(i==2){
+          sumacolumna3+=this.data[i][j];
+        }   
+        if(i==3){   
+          sumacolumna4+=this.data[i][j];
+        }
+        if(i==4){
+          sumacolumna5+=this.data[i][j];
+        }
+        if(i==5){
+          sumacolumna6+=this.data[i][j];
+        }
+        if(i==6){
+          sumacolumna7+=this.data[i][j];
+        }
+        if(i==7){
+          sumacolumna8+=this.data[i][j];
+        }
+        if(i==8){ 
+          sumacolumna9+=this.data[i][j];
+        }
+        if(i==9){
+          sumacolumna10+=this.data[i][j];
+        } 
+        if(suma1==sumacolumna && suma2==sumacolumna2 && suma3==sumacolumna3 && suma4==sumacolumna4 && suma5==sumacolumna5 && suma6==sumacolumna6 && suma7==sumacolumna7 && suma8==sumacolumna8 && suma9==sumacolumna9 && suma10==sumacolumna10){
+         esmagica=true;
+        }else{
+          esmagica=false;
+        }
+        return esmagica;
+      }
+      alert("es magica: "+esmagica);
+    }
+  }
+  
+}
